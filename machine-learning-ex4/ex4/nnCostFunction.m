@@ -62,23 +62,38 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+# add biais in X
+X = [ones(m, 1) X];
 
+#Compute Y into a binary vector
+Y = zeros(m, num_labels);
+for i = 1:size(y,1)
+  Y(i,y(i)) = 1;
+endfor
 
+for c = 1:m
 
+  %compute Layer 1
+  z2 = X(c,:)*Theta1';
+  a2 = sigmoid(z2);
+  
+  %add ones
+  a2 = [1,a2];
 
+  %compute layer 2
+  z3 = a2*Theta2';
+  a3 = sigmoid(z3);
+  
+  #Compute cost
+  jTemp = (-Y(c,:)*log(a3)' - (-Y(c,:).+1)*log(1-a3)');
+  J = J+jTemp;
+endfor
 
+J=J/m;
 
-
-
-
-
-
-
-
-
-
-
-
+# Regularized costs
+regularizedcost = (sum(sum(Theta1(:,2:end).^2(:))) + sum(sum(Theta2(:,2:end).^2(:))))*lambda / 2 / m;
+J=J+regularizedcost;
 
 % -------------------------------------------------------------
 
