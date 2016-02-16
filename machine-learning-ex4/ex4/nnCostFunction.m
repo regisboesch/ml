@@ -73,6 +73,8 @@ endfor
 
 for c = 1:m
 
+  %Forward propagation
+  %-------------------
   %compute Layer 1
   z2 = X(c,:)*Theta1';
   a2 = sigmoid(z2);
@@ -87,14 +89,31 @@ for c = 1:m
   #Compute cost
   jTemp = (-Y(c,:)*log(a3)' - (-Y(c,:).+1)*log(1-a3)');
   J = J+jTemp;
+  
+  #Backward propagation
+  %--------------------
+  
+  d3 = a3-Y(c,:);
+  d2 = (Theta2'*d3')(2:end)'.*sigmoidGradient(z2);
+  d2temp = d3'*a2;
+  d1temp = d2'*X(c,:);
+  
+  %keyboard();
+  Theta1_grad += d1temp;
+  Theta2_grad += d2temp;
 endfor
 
 J=J/m;
+Theta1_grad/=m;
+Theta2_grad/=m;
+%keyboard();
 
 # Regularized costs
 regularizedcost = (sum(sum(Theta1(:,2:end).^2(:))) + sum(sum(Theta2(:,2:end).^2(:))))*lambda / 2 / m;
 J=J+regularizedcost;
 
+Theta2_grad(:,2:end) += Theta2(:,2:end)*lambda/m;
+Theta1_grad(:,2:end) += Theta1(:,2:end)*lambda/m;
 % -------------------------------------------------------------
 
 % =========================================================================
