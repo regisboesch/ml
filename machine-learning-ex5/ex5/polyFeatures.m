@@ -16,7 +16,7 @@ X_poly = zeros(numel(X), p);
 % 
 
 
-
+X_poly = power(X,1:p);
 
 
 
