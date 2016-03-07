@@ -25,10 +25,17 @@ centroids = zeros(K, n);
 %
 % Note: You can use a for-loop over the centroids to compute this.
 %
+numberCi = zeros(K,1);
 
+for index_cluster = 1:size(idx,1)
+  ci = idx(index_cluster);
+  centroids(ci,:) += X(index_cluster,:);
+  numberCi(ci) +=1;
+endfor;
 
-
-
+for index = 1:K
+centroids(index,:) /= numberCi(index);
+endfor;
 
 
 

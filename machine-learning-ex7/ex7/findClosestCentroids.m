@@ -21,6 +21,23 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
+for m=1:size(X,1)
+  #iterate over centroids
+  idx_centreoids = -1;
+  val_centroids= 10000000;
+  
+  for centroid=1:K
+    v = sum((X(m,:)-centroids(centroid,:)).**2);
+    #take minimum
+    if v < val_centroids
+      val_centroids = v;
+      idx_centreoids = centroid;
+    endif;
+  endfor;
+  
+  #asign minimum
+  idx(m) = idx_centreoids;
+endfor;
 
 
 
