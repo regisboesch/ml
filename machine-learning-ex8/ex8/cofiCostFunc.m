@@ -41,10 +41,11 @@ Theta_grad = zeros(size(Theta));
 %
 
 
+% Hence, sum(sum(R.*M)) is the sum of all the elements of M for 
+% which the corresponding element in R equals 1.
 
 
-
-
+J = sum(sum(R.*((X*Theta' - Y).^2)))/2;
 
 
 
