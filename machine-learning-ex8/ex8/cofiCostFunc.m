@@ -44,14 +44,37 @@ Theta_grad = zeros(size(Theta));
 % Hence, sum(sum(R.*M)) is the sum of all the elements of M for 
 % which the corresponding element in R equals 1.
 
-
+costRegTheta = lambda * sum(sum(Theta.^2)) / 2;
+costRegX = lambda * sum(sum(X.^2)) / 2;
 J = sum(sum(R.*((X*Theta' - Y).^2)))/2;
+J += costRegTheta + costRegX;
 
+#Compute X Grad
+for MovieI=1:num_movies
 
+  #Looking for each user rating movie i
+  idxUser = find(R(MovieI, :)==1);
+  
+  ThetaTemp = Theta(idxUser,:);
+  YTemp = Y(MovieI, idxUser);
 
+  X_grad(MovieI,:) = (X(MovieI,:)*ThetaTemp'-YTemp) * ThetaTemp + (lambda*X(MovieI,:));
+  #Theta_grad(idxUser, :) = (X(idxUser,:)*ThetaTemp'-YTemp) * X(idxUser,:);
+endfor
 
-
-
+#Compute Theta Grad
+for UserI= 1:num_users
+  #Looking for each movie whom user has been rated
+  idxMovie = find(R(:, UserI)==1);
+  ThetaTemp = Theta(UserI,:); # OK
+  YTemp = Y(idxMovie, UserI)';
+  oo = X(idxMovie, :)*ThetaTemp'-YTemp';
+  xx = X(idxMovie, :);
+  dd = oo'*xx;
+  #YTemp' * X
+  #YTemp = Y(UserI, idxMovie)
+  Theta_grad(UserI,:) = dd + (lambda * ThetaTemp);
+endfor
 
 
 
